@@ -1,0 +1,84 @@
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">Video Games</h1>
+    <a class="btn btn-primary" routerLink="/games/new">
+      <i class="bi bi-plus-circle" aria-hidden="true"></i> Add Game
+    </a>
+  </div>
+
+  @if (isLoading()) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  } @else if (loadError(); as message) {
+    <ngb-alert type="danger" [dismissible]="false">{{ message }}</ngb-alert>
+  } @else {
+    <div class="row g-4">
+      @for (game of games(); track game.id) {
+        <div class="col-md-6 col-lg-4">
+          <article class="card h-100 shadow-sm" [attr.aria-label]="game.title">
+            <div class="card-body">
+              <h2 class="card-title h5">{{ game.title }}</h2>
+              <p class="card-subtitle text-body-secondary mb-3">{{ game.developer }}</p>
+
+              <dl class="row small mb-3">
+                <dt class="col-5">Publisher</dt>
+                <dd class="col-7">{{ game.publisher }}</dd>
+                <dt class="col-5">Platform</dt>
+                <dd class="col-7">{{ game.platform }}</dd>
+                <dt class="col-5">Genre</dt>
+                <dd class="col-7">{{ game.genre }}</dd>
+                <dt class="col-5">Released</dt>
+                <dd class="col-7">{{ game.releaseDate | date: 'mediumDate' }}</dd>
+                <dt class="col-5">Price</dt>
+                <dd class="col-7">{{ game.price | currency }}</dd>
+              </dl>
+
+              <ngb-progressbar
+                type="success"
+                [value]="game.metacriticScore"
+                [showValue]="true"
+                height="1.25rem"
+                ariaLabel="Metacritic score" />
+
+              @if (game.description) {
+                <p class="card-text small mt-3">{{ game.description }}</p>
+              }
+            </div>
+
+            <div class="card-footer bg-transparent d-flex gap-2">
+              <a class="btn btn-sm btn-outline-primary" [routerLink]="['/games', game.id, 'edit']">
+                <i class="bi bi-pencil" aria-hidden="true"></i> Edit
+              </a>
+              <button type="button" class="btn btn-sm btn-outline-danger" (click)="confirmDelete(game, deleteDialog)">
+                <i class="bi bi-trash" aria-hidden="true"></i> Delete
+              </button>
+            </div>
+          </article>
+        </div>
+      } @empty {
+        <div class="col-12">
+          <div class="alert alert-info">
+            No video games yet. <a class="alert-link" routerLink="/games/new">Add the first one</a>.
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<ng-template #deleteDialog let-modal>
+  <div class="modal-header">
+    <h2 class="modal-title fs-5" id="delete-dialog-title">Delete game</h2>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    Delete <strong>{{ gameToDelete()?.title }}</strong>? This cannot be undone.
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss()">Cancel</button>
+    <button type="button" class="btn btn-danger" (click)="modal.close()">Delete</button>
+  </div>
+</ng-template>

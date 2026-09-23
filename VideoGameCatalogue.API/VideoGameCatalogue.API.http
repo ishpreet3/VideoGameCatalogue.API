@@ -1,0 +1,52 @@
+@HostAddress = http://localhost:5267
+
+GET {{HostAddress}}/api/videogames
+Accept: application/json
+
+###
+
+GET {{HostAddress}}/api/videogames/1
+Accept: application/json
+
+###
+
+GET {{HostAddress}}/api/lookups
+Accept: application/json
+
+###
+
+POST {{HostAddress}}/api/videogames
+Content-Type: application/json
+
+{
+  "title": "Elden Ring",
+  "developer": "FromSoftware",
+  "publisher": "Bandai Namco",
+  "releaseDate": "2022-02-25",
+  "genre": "RPG",
+  "price": 59.99,
+  "platform": "PC",
+  "metacriticScore": 96,
+  "description": "An action role-playing game set in the Lands Between."
+}
+
+###
+
+PUT {{HostAddress}}/api/videogames/1
+Content-Type: application/json
+
+{
+  "title": "The Legend of Zelda: Tears of the Kingdom",
+  "developer": "Nintendo EPD",
+  "publisher": "Nintendo",
+  "releaseDate": "2023-05-12",
+  "genre": "Action-Adventure",
+  "price": 59.99,
+  "platform": "Nintendo Switch",
+  "metacriticScore": 96,
+  "description": "An epic action-adventure game featuring Link in his most ambitious adventure yet."
+}
+
+###
+
+DELETE {{HostAddress}}/api/videogames/1
